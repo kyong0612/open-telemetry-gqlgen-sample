@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  gqlgen-client:
+    image: golang:alpine
+    networks:
+      - example
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "wget --header=\"Content-Type: application/json\" --post-data '{\"query\":\"query {getUser(id:123){id name}}\"}' http://gqlgen-server:8080/query && cat query"
+    depends_on:
+      - gqlgen-server
+  gqlgen-server:
+    build:
+      dockerfile: $PWD/Dockerfile
+      context: ..
+    ports:
+      - "8080:80"
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "/go/bin/server"
+    networks:
+      - example
+networks:
+  example:

@@ -1,0 +1,2 @@
+up:
+	docker compsoe up
